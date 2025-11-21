@@ -93,6 +93,27 @@ export const ApiService = {
     return new Promise(resolve => setTimeout(() => resolve([...MOCK_CONTENT]), 500));
   },
 
+  // Simulate File Upload
+  uploadContent: async (file: File): Promise<MediaContent> => {
+    return new Promise(resolve => {
+        // Create a fake local URL for preview purposes
+        const objectUrl = URL.createObjectURL(file);
+        
+        const newContent: MediaContent = {
+            id: `c-${Date.now()}`,
+            title: file.name,
+            type: file.type.startsWith('video') ? ContentType.VIDEO : ContentType.IMAGE,
+            url: objectUrl,
+            duration_sec: 10, // Default duration
+            created_at: new Date().toISOString(),
+            created_by: 'admin_local'
+        };
+        
+        MOCK_CONTENT.unshift(newContent); // Add to beginning of list
+        setTimeout(() => resolve(newContent), 800); // Simulate network delay
+    });
+  },
+
   getPlaylists: async (): Promise<Playlist[]> => {
     return new Promise(resolve => setTimeout(() => resolve([...MOCK_PLAYLISTS]), 500));
   },
