@@ -129,7 +129,10 @@ const PlayerClient = () => {
           <div className="absolute top-0 left-0 w-full h-28 bg-gradient-to-b from-black/90 to-transparent z-20 flex items-start justify-between p-6">
              <div className="flex items-center gap-4">
                 <img 
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Logo_UII_%28Universitas_Islam_Indonesia%29.png/180px-Logo_UII_%28Universitas_Islam_Indonesia%29.png" 
+                  src="./logo.png"
+                  onError={(e) => {
+                    e.currentTarget.src = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Logo_UII_%28Universitas_Islam_Indonesia%29.png/180px-Logo_UII_%28Universitas_Islam_Indonesia%29.png";
+                  }} 
                   alt="UII Logo" 
                   className="w-14 h-auto drop-shadow-lg" 
                 />
@@ -212,9 +215,7 @@ const PlayerClient = () => {
           <div className={`absolute bottom-20 right-6 z-20 flex items-center gap-3 transition-opacity duration-500 ${showControls ? 'opacity-100' : 'opacity-0'}`}>
                 <div className="bg-black/60 backdrop-blur px-3 py-1 rounded text-right">
                     <div className="text-white font-bold text-sm drop-shadow-md truncate max-w-[200px]">{currentItem.title}</div>
-                    <div className="text-slate-300 text-[10px] drop-shadow-md uppercase tracking-widest">
-                        {id} • {signageInfo?.location}
-                    </div>
+                    {/* Location and ID Info removed as requested for cleaner client view */}
                 </div>
                 {isOffline ? <WifiOff className="text-red-500 drop-shadow" size={20} /> : <Wifi className="text-green-500 drop-shadow" size={20} />}
           </div>
