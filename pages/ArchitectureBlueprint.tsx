@@ -1,5 +1,5 @@
 import React from 'react';
-import { Server, Monitor, Database, Globe, Shield, Cpu, ArrowRight, Package, Layers, Code } from 'lucide-react';
+import { Server, Database, Package, CheckCircle, AlertTriangle, FileText, Terminal, Monitor, Globe } from 'lucide-react';
 
 const Section = ({ title, children }: { title: string, children?: React.ReactNode }) => (
   <section className="mb-12">
@@ -12,156 +12,163 @@ const ArchitectureBlueprint = () => {
   return (
     <div className="max-w-5xl mx-auto">
       <div className="mb-8">
-        <h2 className="text-3xl font-bold text-white">System Blueprint</h2>
-        <p className="text-slate-400 mt-2">Architectural design for the FTI Digital Signage System (7 Units)</p>
+        <h2 className="text-3xl font-bold text-white">Deployment Guide</h2>
+        <p className="text-slate-400 mt-2">Panduan Rinci Deploy ke Server XAMPP (Windows)</p>
       </div>
 
-      {/* XAMPP Deployment Guide */}
-      <Section title="1. Deployment on XAMPP & WordPress">
-        <div className="bg-blue-900/10 border border-blue-500/20 p-6 rounded-xl mb-8">
+      {/* Step 1: Preparation */}
+      <Section title="Langkah 1: Persiapan Build (Di Laptop Development)">
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
           <div className="flex items-start gap-4">
-            <Package className="text-blue-400 shrink-0" size={32} />
-            <div>
-              <h4 className="text-lg font-bold text-white mb-2">How to deploy this App on your XAMPP Server</h4>
-              <p className="text-slate-300 mb-4 text-sm leading-relaxed">
-                Since you have XAMPP and WordPress, the best approach is a "Headless" architecture. 
-                The Frontend (this React App) sits in your <code>htdocs</code> folder, while WordPress acts as the Database and API.
-              </p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                 <div className="bg-slate-950 p-4 rounded border border-slate-800">
-                    <h5 className="text-blue-400 font-mono text-xs mb-2 uppercase">Folder Structure (C:\xampp\htdocs)</h5>
-                    <pre className="text-xs text-slate-300 font-mono overflow-x-auto">
-{`htdocs/
-├── wordpress/        <-- Your existing WP
-│   └── wp-admin/
-├── fti-signage/      <-- THIS REACT APP
-│   ├── index.html
-│   ├── assets/
-│   │   ├── index.js
-│   │   └── index.css`}
-                    </pre>
-                 </div>
-                 
-                 <div className="bg-slate-950 p-4 rounded border border-slate-800">
-                    <h5 className="text-green-400 font-mono text-xs mb-2 uppercase">Integration Logic</h5>
-                    <ul className="text-xs text-slate-400 space-y-2 list-disc pl-4">
-                        <li><strong>Build:</strong> Run <code>npm run build</code> in your development folder. Copy the output to <code>htdocs/fti-signage</code>.</li>
-                        <li><strong>Backend:</strong> Use WordPress REST API. Create a Custom Post Type "Signage".</li>
-                        <li><strong>Access:</strong> Access admin via <code>localhost/fti-signage/</code>.</li>
-                    </ul>
-                 </div>
-              </div>
-            </div>
+             <div className="bg-blue-900/30 p-3 rounded-lg text-blue-400">
+                <Terminal size={24} />
+             </div>
+             <div>
+                <h4 className="text-lg font-bold text-white">1. Konfigurasi 'vite.config.ts'</h4>
+                <p className="text-slate-300 text-sm mt-1">
+                   Pastikan file <code>vite.config.ts</code> memiliki properti <code>base: './'</code>. 
+                   Ini wajib agar aplikasi tidak "Blank White Screen" saat ditaruh di sub-folder htdocs.
+                </p>
+             </div>
+          </div>
+
+          <div className="flex items-start gap-4 border-t border-slate-800 pt-4">
+             <div className="bg-purple-900/30 p-3 rounded-lg text-purple-400">
+                <Package size={24} />
+             </div>
+             <div>
+                <h4 className="text-lg font-bold text-white">2. Jalankan Perintah Build</h4>
+                <p className="text-slate-300 text-sm mt-1">
+                   Buka terminal/command prompt di folder proyek ini, lalu ketik:
+                </p>
+                <div className="mt-2 bg-black rounded p-3 font-mono text-green-400 text-sm">
+                    npm run build
+                </div>
+                <p className="text-slate-400 text-xs mt-2">
+                    Setelah selesai, akan muncul folder baru bernama <strong>dist</strong>.
+                </p>
+             </div>
           </div>
         </div>
       </Section>
 
-      {/* WordPress Backend Code */}
-      <Section title="2. Backend Setup (WordPress Code)">
-        <div className="mb-4">
-            <p className="text-slate-300 text-sm mb-2">
-                Add this code to your WordPress Theme's <code>functions.php</code> or create a custom plugin.
-                It creates the API endpoints required for the Signage App.
-            </p>
+      {/* Step 2: Server Setup */}
+      <Section title="Langkah 2: Copy ke Server (Mini PC / Server Utama)">
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-6">
+             <div className="flex items-center gap-3 mb-2">
+                <Server className="text-green-400" />
+                <h4 className="font-bold text-white">Struktur Folder XAMPP</h4>
+             </div>
+             
+             <p className="text-sm text-slate-300">
+                Copy <strong>isi</strong> dari folder <code>dist</code> (hasil langkah 1) ke dalam folder baru di <code>htdocs</code>.
+             </p>
+
+             <div className="bg-slate-950 p-4 rounded border border-slate-700 font-mono text-xs text-slate-300">
+                C:\xampp\htdocs\<br/>
+                ├── wordpress/          <span className="text-slate-500">(Instalasi WP Anda)</span><br/>
+                └── <span className="text-yellow-400">fti-signage/</span>        <span className="text-slate-500">(Buat folder ini)</span><br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;├── assets/         <span className="text-slate-500">(Dari folder dist)</span><br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;├── index.html      <span className="text-slate-500">(File utama)</span><br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;└── vite.svg
+             </div>
+
+             <div className="bg-yellow-900/20 border border-yellow-500/20 p-4 rounded flex items-start gap-3">
+                <AlertTriangle className="text-yellow-500 shrink-0" />
+                <div>
+                    <h5 className="text-yellow-500 font-bold text-sm">PENTING: WordPress API</h5>
+                    <p className="text-slate-400 text-xs mt-1">
+                        Aplikasi ini (Frontend) perlu bicara dengan WordPress (Backend). 
+                        Pastikan Anda sudah menambahkan kode PHP di bawah ini ke <code>functions.php</code> tema WordPress Anda.
+                    </p>
+                </div>
+             </div>
         </div>
-        <div className="bg-slate-950 border border-slate-800 rounded-xl overflow-hidden relative">
-            <div className="absolute top-0 right-0 bg-slate-800 px-3 py-1 text-xs text-white rounded-bl">php</div>
-            <pre className="p-4 text-xs font-mono text-green-300 overflow-x-auto">
+      </Section>
+
+      {/* Step 3: Backend Code */}
+      <Section title="Langkah 3: Integrasi Backend (WordPress functions.php)">
+        <div className="relative group">
+            <div className="absolute top-2 right-2 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-50 group-hover:opacity-100 transition-opacity">
+                Copy PHP Code
+            </div>
+            <pre className="bg-slate-950 border border-slate-800 p-4 rounded-xl text-xs font-mono text-green-300 overflow-x-auto">
 {`<?php
-/**
- * FTI Digital Signage - Custom Post Types & API
- */
+// Tambahkan ini di akhir file: wp-content/themes/nama-tema/functions.php
 
-function create_signage_post_types() {
-    // 1. Register Signage Unit
+// 1. Registrasi Tipe Post "Signage" & "Content"
+add_action('init', function() {
     register_post_type('signage_unit', array(
-        'labels' => array('name' => 'Signage Units', 'singular_name' => 'Signage Unit'),
+        'labels' => array('name' => 'Signage Units'),
         'public' => true,
-        'show_in_rest' => true, // Enable REST API
-        'supports' => array('title', 'custom-fields'),
-        'menu_icon' => 'dashicons-video-alt3'
+        'show_in_rest' => true, // Wajib true agar bisa diakses React
+        'supports' => array('title', 'custom-fields')
     ));
-
-    // 2. Register Content Media
+    
     register_post_type('signage_content', array(
-        'labels' => array('name' => 'Signage Content', 'singular_name' => 'Content'),
+        'labels' => array('name' => 'Signage Content'),
         'public' => true,
-        'show_in_rest' => true,
-        'supports' => array('title', 'editor', 'thumbnail', 'custom-fields'),
-        'menu_icon' => 'dashicons-images-alt2'
-    ));
-}
-add_action('init', 'create_signage_post_types');
-
-// 3. Add Custom REST API Endpoint for "Get Playlist by Signage ID"
-add_action('rest_api_init', function () {
-    register_rest_route('fti-signage/v1', '/playlist/(?P<id>\\d+)', array(
-        'methods' => 'GET',
-        'callback' => 'get_signage_playlist',
-        'permission_callback' => '__return_true', // Warning: Secure this in production
+        'show_in_rest' => true, 
+        'supports' => array('title', 'editor', 'thumbnail', 'custom-fields')
     ));
 });
 
-function get_signage_playlist($data) {
-    // Logic to fetch content assigned to this ID
-    // This is a simplified example
-    $posts = get_posts(array(
-        'post_type' => 'signage_content',
-        'numberposts' => 5
+// 2. (Opsional) API Endpoint Khusus untuk Playlist
+add_action('rest_api_init', function () {
+    register_rest_route('fti-signage/v1', '/playlist/(?P<id>\\d+)', array(
+        'methods' => 'GET',
+        'callback' => 'get_custom_playlist',
     ));
-    
-    $playlist = [];
-    foreach($posts as $p) {
-        $playlist[] = array(
-            'id' => $p->ID,
-            'title' => $p->post_title,
-            'url' => get_the_post_thumbnail_url($p->ID, 'full'),
+});
+
+function get_custom_playlist($data) {
+    // Logika custom untuk mengambil konten
+    return array(
+        array(
+            'id' => 'wp-1',
             'type' => 'IMAGE',
-            'duration' => get_post_meta($p->ID, 'duration_sec', true) ?: 10
-        );
-    }
-    
-    return $playlist;
+            'url' => 'http://localhost/wordpress/wp-content/uploads/2024/01/welcome.jpg',
+            'duration_sec' => 10
+        )
+    );
 }
 ?>`}
             </pre>
         </div>
       </Section>
 
-      <Section title="3. Database Schema Design (WordPress Mapping)">
-        <p className="text-sm text-slate-400 mb-4">
-            Since you are using WordPress, standard tables are replaced by WP Post Types and Meta Fields.
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-slate-800 rounded-lg p-4 border border-slate-700">
-            <div className="flex items-center gap-2 mb-3 text-yellow-400">
-              <Database size={18} />
-              <span className="font-mono font-bold">Post Type: 'signage_unit'</span>
+      {/* Step 4: Client Setup */}
+      <Section title="Langkah 4: Setup di Mini PC (Client)">
+         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+                <h4 className="font-bold text-white flex items-center gap-2 mb-3">
+                    <Monitor size={18} className="text-blue-400" /> Windows Settings
+                </h4>
+                <ul className="text-sm text-slate-300 space-y-2 list-disc pl-4">
+                    <li>Masuk ke <strong>Display Settings</strong>.</li>
+                    <li>Set Orientation ke <strong>Portrait</strong>.</li>
+                    <li>Set Resolution ke <strong>2160 x 3840</strong> (4K).</li>
+                    <li>Scale & Layout: Set ke 100% atau 150% (sesuaikan agar UI tidak terlalu kecil).</li>
+                </ul>
             </div>
-            <div className="font-mono text-xs space-y-1 text-slate-300">
-              <div className="flex justify-between"><span className="text-purple-400">post_title</span> <span>Hostname (FTI-SIG-01)</span></div>
-              <div className="flex justify-between"><span className="text-blue-400">meta_key</span> <span>mac_address</span></div>
-              <div className="flex justify-between"><span className="text-blue-400">meta_key</span> <span>location</span></div>
-              <div className="flex justify-between"><span className="text-blue-400">meta_key</span> <span>status</span></div>
-            </div>
-          </div>
 
-          <div className="bg-slate-800 rounded-lg p-4 border border-slate-700">
-            <div className="flex items-center gap-2 mb-3 text-yellow-400">
-              <Database size={18} />
-              <span className="font-mono font-bold">Post Type: 'signage_content'</span>
+            <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+                <h4 className="font-bold text-white flex items-center gap-2 mb-3">
+                    <Globe size={18} className="text-blue-400" /> Browser Kiosk Mode
+                </h4>
+                <p className="text-sm text-slate-300 mb-2">
+                    Buat shortcut Chrome/Edge di desktop Mini PC dengan Target:
+                </p>
+                <div className="bg-black p-2 rounded text-xs font-mono text-green-400 break-all">
+                    "C:\Program Files\Google\Chrome\Application\chrome.exe" --kiosk "http://localhost/fti-signage/#/player/FTI-SIGNAGE-01" --user-data-dir="c:/temp/signage01"
+                </div>
+                <p className="text-xs text-slate-500 mt-2">
+                    Ganti <code>localhost</code> dengan IP Server jika Mini PC mengakses via jaringan WiFi.
+                </p>
             </div>
-            <div className="font-mono text-xs space-y-1 text-slate-300">
-              <div className="flex justify-between"><span className="text-purple-400">post_title</span> <span>Content Title</span></div>
-              <div className="flex justify-between"><span className="text-purple-400">post_content</span> <span>Description</span></div>
-              <div className="flex justify-between"><span className="text-blue-400">meta_key</span> <span>file_url</span></div>
-              <div className="flex justify-between"><span className="text-blue-400">meta_key</span> <span>duration_sec</span></div>
-              <div className="flex justify-between"><span className="text-blue-400">meta_key</span> <span>media_type</span></div>
-            </div>
-          </div>
-        </div>
+         </div>
       </Section>
+
     </div>
   );
 };
