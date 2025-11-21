@@ -2,11 +2,21 @@ import { SignageUnit, SignageStatus, MediaContent, ContentType, Playlist, Schedu
 
 // --- Mock Database ---
 
+const LOCATION_NAMES = [
+  "Lobi Barat",
+  "Lobi Timur",
+  "Lantai 1",
+  "Lantai 2",
+  "Lantai 3",
+  "Lantai 4",
+  "Lab Selatan"
+];
+
 const MOCK_SIGNAGES: SignageUnit[] = Array.from({ length: 7 }).map((_, i) => ({
   id: `sig-${i + 1}`,
   hostname: `FTI-SIGNAGE-0${i + 1}`,
   mac_address: `00:1A:2B:3C:4D:0${i + 1}`,
-  location: i === 0 ? 'Main Lobby' : i < 3 ? 'Corridor A' : i < 5 ? 'Corridor B' : 'Cafeteria',
+  location: LOCATION_NAMES[i],
   resolution: '2160x3840',
   status: i === 4 ? SignageStatus.OFFLINE : SignageStatus.ONLINE,
   last_heartbeat: new Date().toISOString(),
@@ -76,8 +86,26 @@ const MOCK_SCHEDULES: ScheduleAssignment[] = [
 ];
 
 // --- API Service Simulation ---
+// Implements the requested endpoints:
+// GET /api/content?signage_id=...
+// POST /api/content
+// POST /api/assign
+// GET /api/signage/status
+// POST /api/auth/login
 
 export const ApiService = {
+  // POST /api/auth/login
+  login: async (username: string, password: string): Promise<{ token: string, user: any } | null> => {
+      return new Promise(resolve => {
+          if(username === 'admin' && password === 'password') {
+              resolve({ token: 'mock-jwt-token-123', user: { name: 'Admin', role: 'admin' }});
+          } else {
+              resolve(null);
+          }
+      });
+  },
+
+  // GET /api/signage/status (Combined with getSignages for now)
   getSignages: async (): Promise<SignageUnit[]> => {
     return new Promise(resolve => setTimeout(() => resolve([...MOCK_SIGNAGES]), 500));
   },
@@ -89,11 +117,12 @@ export const ApiService = {
     });
   },
 
+  // GET /api/content (General library)
   getContent: async (): Promise<MediaContent[]> => {
     return new Promise(resolve => setTimeout(() => resolve([...MOCK_CONTENT]), 500));
   },
 
-  // Simulate File Upload
+  // POST /api/content
   uploadContent: async (file: File): Promise<MediaContent> => {
     return new Promise(resolve => {
         // Create a fake local URL for preview purposes
@@ -118,7 +147,7 @@ export const ApiService = {
     return new Promise(resolve => setTimeout(() => resolve([...MOCK_PLAYLISTS]), 500));
   },
 
-  // Schedules
+  // POST /api/assign (Simulated via Schedule creation)
   createSchedule: async (schedule: ScheduleAssignment): Promise<void> => {
     MOCK_SCHEDULES.push(schedule);
     return new Promise(resolve => setTimeout(resolve, 500));
@@ -130,14 +159,13 @@ export const ApiService = {
     return new Promise(resolve => setTimeout(resolve, 500));
   },
 
-  // Simulating the complex query: GET /content?signage_id=X
-  // Returns the current playlist items for a signage based on schedule
+  // GET /api/content?signage_id=X
+  // Logic: Get Schedule -> Get Playlist -> Get Content Items
   getSignagePlaylist: async (signageId: string): Promise<MediaContent[]> => {
     // 1. Find active schedule
-    // In real logic, checks overlapping dates. For mock, just find first match.
     const schedule = MOCK_SCHEDULES.find(s => s.signage_id === signageId);
     
-    // Fallback to default playlist if no specific schedule
+    // Fallback to default playlist if no specific schedule found
     const playlistId = schedule ? schedule.playlist_id : 'pl-1'; 
     const playlist = MOCK_PLAYLISTS.find(p => p.id === playlistId);
     

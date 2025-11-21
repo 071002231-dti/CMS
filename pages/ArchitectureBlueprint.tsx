@@ -1,8 +1,8 @@
 import React from 'react';
-import { Server, Database, Package, CheckCircle, AlertTriangle, FileText, Terminal, Monitor, Globe } from 'lucide-react';
+import { Server, Database, Package, CheckCircle, Terminal, Monitor, Network, BookOpen, Code } from 'lucide-react';
 
 const Section = ({ title, children }: { title: string, children?: React.ReactNode }) => (
-  <section className="mb-12">
+  <section className="mb-12 scroll-mt-20" id={title.toLowerCase().replace(/\s/g, '-')}>
     <h3 className="text-xl font-bold text-white mb-4 border-b border-slate-800 pb-2">{title}</h3>
     {children}
   </section>
@@ -10,163 +10,239 @@ const Section = ({ title, children }: { title: string, children?: React.ReactNod
 
 const ArchitectureBlueprint = () => {
   return (
-    <div className="max-w-5xl mx-auto">
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold text-white">Deployment Guide</h2>
-        <p className="text-slate-400 mt-2">Panduan Rinci Deploy ke Server XAMPP (Windows)</p>
+    <div className="max-w-5xl mx-auto pb-20">
+      <div className="mb-8 border-b border-slate-800 pb-6">
+        <h2 className="text-3xl font-bold text-white">Dokumentasi & Panduan Sistem</h2>
+        <p className="text-slate-400 mt-2">Instruksi kerja lengkap dari instalasi, konfigurasi server, hingga deployment signage.</p>
       </div>
 
-      {/* Step 1: Preparation */}
-      <Section title="Langkah 1: Persiapan Build (Di Laptop Development)">
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
-          <div className="flex items-start gap-4">
-             <div className="bg-blue-900/30 p-3 rounded-lg text-blue-400">
-                <Terminal size={24} />
-             </div>
-             <div>
-                <h4 className="text-lg font-bold text-white">1. Konfigurasi 'vite.config.ts'</h4>
-                <p className="text-slate-300 text-sm mt-1">
-                   Pastikan file <code>vite.config.ts</code> memiliki properti <code>base: './'</code>. 
-                   Ini wajib agar aplikasi tidak "Blank White Screen" saat ditaruh di sub-folder htdocs.
-                </p>
-             </div>
-          </div>
-
-          <div className="flex items-start gap-4 border-t border-slate-800 pt-4">
-             <div className="bg-purple-900/30 p-3 rounded-lg text-purple-400">
-                <Package size={24} />
-             </div>
-             <div>
-                <h4 className="text-lg font-bold text-white">2. Jalankan Perintah Build</h4>
-                <p className="text-slate-300 text-sm mt-1">
-                   Buka terminal/command prompt di folder proyek ini, lalu ketik:
-                </p>
-                <div className="mt-2 bg-black rounded p-3 font-mono text-green-400 text-sm">
-                    npm run build
-                </div>
-                <p className="text-slate-400 text-xs mt-2">
-                    Setelah selesai, akan muncul folder baru bernama <strong>dist</strong>.
-                </p>
-             </div>
-          </div>
+      {/* Navigation Index */}
+      <div className="bg-slate-900/50 p-4 rounded-lg mb-10 border border-slate-800">
+        <h4 className="text-sm font-bold text-slate-300 mb-3 uppercase tracking-wider">Daftar Isi</h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+            <a href="#1.-arsitektur-sistem" className="text-blue-400 hover:underline">1. Arsitektur Sistem</a>
+            <a href="#2.-persiapan-lingkungan-(development)" className="text-blue-400 hover:underline">2. Persiapan Lingkungan (Development)</a>
+            <a href="#3.-setup-backend-(wordpress)" className="text-blue-400 hover:underline">3. Setup Backend (WordPress)</a>
+            <a href="#4.-build-&-deploy-(xampp)" className="text-blue-400 hover:underline">4. Build & Deploy (XAMPP)</a>
+            <a href="#5.-setup-client-(mini-pc)" className="text-blue-400 hover:underline">5. Setup Client (Mini PC)</a>
+            <a href="#6.-spesifikasi-api" className="text-blue-400 hover:underline">6. Spesifikasi API</a>
         </div>
-      </Section>
+      </div>
 
-      {/* Step 2: Server Setup */}
-      <Section title="Langkah 2: Copy ke Server (Mini PC / Server Utama)">
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-6">
-             <div className="flex items-center gap-3 mb-2">
-                <Server className="text-green-400" />
-                <h4 className="font-bold text-white">Struktur Folder XAMPP</h4>
-             </div>
-             
-             <p className="text-sm text-slate-300">
-                Copy <strong>isi</strong> dari folder <code>dist</code> (hasil langkah 1) ke dalam folder baru di <code>htdocs</code>.
-             </p>
-
-             <div className="bg-slate-950 p-4 rounded border border-slate-700 font-mono text-xs text-slate-300">
-                C:\xampp\htdocs\<br/>
-                ├── wordpress/          <span className="text-slate-500">(Instalasi WP Anda)</span><br/>
-                └── <span className="text-yellow-400">fti-signage/</span>        <span className="text-slate-500">(Buat folder ini)</span><br/>
-                &nbsp;&nbsp;&nbsp;&nbsp;├── assets/         <span className="text-slate-500">(Dari folder dist)</span><br/>
-                &nbsp;&nbsp;&nbsp;&nbsp;├── index.html      <span className="text-slate-500">(File utama)</span><br/>
-                &nbsp;&nbsp;&nbsp;&nbsp;└── vite.svg
-             </div>
-
-             <div className="bg-yellow-900/20 border border-yellow-500/20 p-4 rounded flex items-start gap-3">
-                <AlertTriangle className="text-yellow-500 shrink-0" />
-                <div>
-                    <h5 className="text-yellow-500 font-bold text-sm">PENTING: WordPress API</h5>
-                    <p className="text-slate-400 text-xs mt-1">
-                        Aplikasi ini (Frontend) perlu bicara dengan WordPress (Backend). 
-                        Pastikan Anda sudah menambahkan kode PHP di bawah ini ke <code>functions.php</code> tema WordPress Anda.
-                    </p>
+      {/* BAB 1: ARSITEKTUR */}
+      <Section title="1. Arsitektur Sistem">
+        <div className="bg-slate-900 border border-slate-800 p-6 rounded-xl">
+            <p className="text-slate-300 mb-4">
+                Sistem Digital Signage FTI UII menggunakan arsitektur <strong>Headless CMS</strong>.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                <div className="p-4 bg-slate-950 rounded-lg border border-slate-800">
+                    <Server className="mx-auto mb-3 text-blue-500" size={32} />
+                    <h4 className="font-bold text-white">Server (Backend)</h4>
+                    <p className="text-xs text-slate-400 mt-1">WordPress + XAMPP</p>
+                    <p className="text-xs text-slate-500 mt-1">Menyimpan data, user, konten, dan menyediakan REST API.</p>
                 </div>
-             </div>
-        </div>
-      </Section>
-
-      {/* Step 3: Backend Code */}
-      <Section title="Langkah 3: Integrasi Backend (WordPress functions.php)">
-        <div className="relative group">
-            <div className="absolute top-2 right-2 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-50 group-hover:opacity-100 transition-opacity">
-                Copy PHP Code
+                <div className="flex items-center justify-center">
+                    <div className="h-0.5 w-full bg-slate-700 relative">
+                        <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-slate-900 px-2 text-xs text-slate-500">JSON API</span>
+                    </div>
+                </div>
+                <div className="p-4 bg-slate-950 rounded-lg border border-slate-800">
+                    <Monitor className="mx-auto mb-3 text-green-500" size={32} />
+                    <h4 className="font-bold text-white">Client (Frontend)</h4>
+                    <p className="text-xs text-slate-400 mt-1">React JS (SPA)</p>
+                    <p className="text-xs text-slate-500 mt-1">Menampilkan konten di Mini PC & Dashboard Admin.</p>
+                </div>
             </div>
-            <pre className="bg-slate-950 border border-slate-800 p-4 rounded-xl text-xs font-mono text-green-300 overflow-x-auto">
-{`<?php
-// Tambahkan ini di akhir file: wp-content/themes/nama-tema/functions.php
+        </div>
+      </Section>
 
-// 1. Registrasi Tipe Post "Signage" & "Content"
+      {/* BAB 2: PRE-REQUISITES */}
+      <Section title="2. Persiapan Lingkungan (Development)">
+        <div className="space-y-4">
+            <p className="text-slate-400 text-sm">Sebelum melakukan perubahan kode, pastikan PC Developer terinstall:</p>
+            <ul className="list-disc list-inside space-y-2 text-slate-300 text-sm ml-4">
+                <li><strong>Node.js</strong> (Versi 18 atau terbaru). Download di <code className="bg-slate-800 px-1 rounded">nodejs.org</code>.</li>
+                <li><strong>Visual Studio Code</strong> (Text Editor).</li>
+                <li><strong>XAMPP</strong> (Untuk simulasi server lokal).</li>
+            </ul>
+            
+            <div className="bg-slate-900 p-4 rounded-lg border border-slate-800 mt-4">
+                <h5 className="font-bold text-white text-sm mb-2 flex items-center gap-2"><Terminal size={16}/> Perintah Instalasi Awal</h5>
+                <pre className="bg-black p-3 rounded text-green-400 font-mono text-xs">
+{`# 1. Buka Terminal di folder project
+cd fti-signage-cms
+
+# 2. Install semua library yang dibutuhkan
+npm install
+
+# 3. Jalankan mode development (untuk coding)
+npm run dev`}
+                </pre>
+            </div>
+        </div>
+      </Section>
+
+      {/* BAB 3: WORDPRESS BACKEND */}
+      <Section title="3. Setup Backend (WordPress)">
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+            <div className="flex items-start gap-4">
+                 <div className="bg-blue-900/30 p-3 rounded-lg text-blue-400 shrink-0">
+                    <Code size={24} />
+                 </div>
+                 <div>
+                    <h4 className="text-lg font-bold text-white">Aktivasi API di WordPress</h4>
+                    <p className="text-slate-300 text-sm mt-1 mb-4">
+                       Secara default, WordPress tidak memiliki tipe data 'Signage'. Anda perlu menambahkan kode berikut ke dalam file <code>functions.php</code> di tema yang aktif.
+                    </p>
+                    
+                    <div className="relative">
+                        <div className="absolute top-0 right-0 bg-slate-800 text-xs px-2 py-1 rounded-bl text-slate-400">wp-content/themes/your-theme/functions.php</div>
+                        <pre className="bg-slate-950 p-4 rounded-lg text-xs font-mono text-blue-300 overflow-x-auto border border-slate-800">
+{`<?php
+/* --- TAMBAHKAN KODE INI DI BAGIAN BAWAH FILE --- */
+
 add_action('init', function() {
+    // 1. Register Post Type: Unit Signage
     register_post_type('signage_unit', array(
         'labels' => array('name' => 'Signage Units'),
         'public' => true,
-        'show_in_rest' => true, // Wajib true agar bisa diakses React
-        'supports' => array('title', 'custom-fields')
+        'show_in_rest' => true, // WAJIB TRUE: Agar bisa diakses React App
+        'supports' => array('title', 'custom-fields'),
+        'menu_icon' => 'dashicons-video-alt3'
     ));
     
+    // 2. Register Post Type: Konten
     register_post_type('signage_content', array(
-        'labels' => array('name' => 'Signage Content'),
+        'labels' => array('name' => 'Materi Signage'),
         'public' => true,
         'show_in_rest' => true, 
-        'supports' => array('title', 'editor', 'thumbnail', 'custom-fields')
+        'supports' => array('title', 'editor', 'thumbnail', 'custom-fields'),
+        'menu_icon' => 'dashicons-media-document'
     ));
 });
 
-// 2. (Opsional) API Endpoint Khusus untuk Playlist
-add_action('rest_api_init', function () {
-    register_rest_route('fti-signage/v1', '/playlist/(?P<id>\\d+)', array(
-        'methods' => 'GET',
-        'callback' => 'get_custom_playlist',
-    ));
+// 3. Izinkan CORS (Agar React bisa akses dari domain/port berbeda jika perlu)
+add_action( 'init', function() {
+    header("Access-Control-Allow-Origin: *");
 });
-
-function get_custom_playlist($data) {
-    // Logika custom untuk mengambil konten
-    return array(
-        array(
-            'id' => 'wp-1',
-            'type' => 'IMAGE',
-            'url' => 'http://localhost/wordpress/wp-content/uploads/2024/01/welcome.jpg',
-            'duration_sec' => 10
-        )
-    );
-}
 ?>`}
-            </pre>
+                        </pre>
+                    </div>
+                 </div>
+            </div>
         </div>
       </Section>
 
-      {/* Step 4: Client Setup */}
-      <Section title="Langkah 4: Setup di Mini PC (Client)">
-         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl">
-                <h4 className="font-bold text-white flex items-center gap-2 mb-3">
-                    <Monitor size={18} className="text-blue-400" /> Windows Settings
-                </h4>
-                <ul className="text-sm text-slate-300 space-y-2 list-disc pl-4">
-                    <li>Masuk ke <strong>Display Settings</strong>.</li>
-                    <li>Set Orientation ke <strong>Portrait</strong>.</li>
-                    <li>Set Resolution ke <strong>2160 x 3840</strong> (4K).</li>
-                    <li>Scale & Layout: Set ke 100% atau 150% (sesuaikan agar UI tidak terlalu kecil).</li>
-                </ul>
+      {/* BAB 4: DEPLOYMENT XAMPP */}
+      <Section title="4. Build & Deploy (XAMPP)">
+        <div className="space-y-6">
+            <div className="bg-amber-900/20 border border-amber-500/30 p-4 rounded-lg flex gap-3">
+                <CheckCircle className="text-amber-500 shrink-0" size={20} />
+                <div>
+                    <h5 className="text-amber-200 font-bold text-sm">Konfigurasi Kunci: Base Path</h5>
+                    <p className="text-amber-100/70 text-xs mt-1">
+                        Agar aplikasi tidak <strong>Blank (Layar Putih)</strong> saat diletakkan di sub-folder XAMPP, pastikan file <code>vite.config.ts</code> berisi <code>base: './'</code>. Aplikasi ini sudah dikonfigurasi demikian secara default.
+                    </p>
+                </div>
             </div>
 
-            <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl">
-                <h4 className="font-bold text-white flex items-center gap-2 mb-3">
-                    <Globe size={18} className="text-blue-400" /> Browser Kiosk Mode
-                </h4>
-                <p className="text-sm text-slate-300 mb-2">
-                    Buat shortcut Chrome/Edge di desktop Mini PC dengan Target:
-                </p>
-                <div className="bg-black p-2 rounded text-xs font-mono text-green-400 break-all">
-                    "C:\Program Files\Google\Chrome\Application\chrome.exe" --kiosk "http://localhost/fti-signage/#/player/FTI-SIGNAGE-01" --user-data-dir="c:/temp/signage01"
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Step 1 */}
+                <div className="bg-slate-900 p-5 rounded-xl border border-slate-800">
+                    <span className="text-xs font-bold text-slate-500 uppercase">Langkah 1</span>
+                    <h4 className="font-bold text-white text-lg mb-2">Build Project</h4>
+                    <p className="text-sm text-slate-400 mb-3">Ubah kode React menjadi file HTML/JS statis.</p>
+                    <pre className="bg-black p-2 rounded text-green-400 font-mono text-xs">npm run build</pre>
+                    <p className="text-xs text-slate-500 mt-2">Hasilnya akan muncul di folder <code>dist/</code>.</p>
                 </div>
-                <p className="text-xs text-slate-500 mt-2">
-                    Ganti <code>localhost</code> dengan IP Server jika Mini PC mengakses via jaringan WiFi.
-                </p>
+
+                {/* Step 2 */}
+                <div className="bg-slate-900 p-5 rounded-xl border border-slate-800">
+                    <span className="text-xs font-bold text-slate-500 uppercase">Langkah 2</span>
+                    <h4 className="font-bold text-white text-lg mb-2">Copy ke htdocs</h4>
+                    <p className="text-sm text-slate-400 mb-3">Pindahkan isi folder <code>dist</code> ke server.</p>
+                    <ol className="list-decimal list-inside text-xs text-slate-300 space-y-1">
+                        <li>Buka folder <code>C:\xampp\htdocs\</code></li>
+                        <li>Buat folder baru: <code>fti-signage</code></li>
+                        <li>Copy semua file dari folder <code>dist</code> ke dalamnya.</li>
+                        <li>Akses di browser: <code>localhost/fti-signage</code></li>
+                    </ol>
+                </div>
             </div>
-         </div>
+        </div>
+      </Section>
+
+      {/* BAB 5: CLIENT SETUP */}
+      <Section title="5. Setup Client (Mini PC)">
+        <div className="bg-slate-900 border border-slate-800 p-6 rounded-xl">
+            <h4 className="font-bold text-white mb-4">Instruksi Setting Mini PC (Windows 11)</h4>
+            <ol className="space-y-4 text-sm text-slate-300">
+                <li className="flex gap-3">
+                    <span className="bg-slate-800 h-6 w-6 flex items-center justify-center rounded-full text-xs font-bold">1</span>
+                    <div>
+                        <strong>Koneksi Jaringan:</strong> Pastikan Mini PC terhubung ke Wi-Fi FTI yang sama dengan Server.
+                    </div>
+                </li>
+                <li className="flex gap-3">
+                    <span className="bg-slate-800 h-6 w-6 flex items-center justify-center rounded-full text-xs font-bold">2</span>
+                    <div>
+                        <strong>Browser Kiosk Mode:</strong> Gunakan Chrome/Edge. Buat shortcut di desktop dengan target:<br/>
+                        <code className="bg-slate-950 px-2 py-1 rounded text-blue-300 text-xs block mt-1 select-all">
+                            "C:\Program Files\Google\Chrome\Application\chrome.exe" --kiosk --incognito "http://[IP_SERVER]/fti-signage/#/player/FTI-SIGNAGE-01"
+                        </code>
+                        <span className="text-xs text-slate-500 italic">Ganti FTI-SIGNAGE-01 sesuai ID masing-masing lokasi.</span>
+                    </div>
+                </li>
+                <li className="flex gap-3">
+                    <span className="bg-slate-800 h-6 w-6 flex items-center justify-center rounded-full text-xs font-bold">3</span>
+                    <div>
+                        <strong>Startup Otomatis:</strong> Tekan <code>Win + R</code>, ketik <code>shell:startup</code>. Masukkan shortcut tadi ke folder startup agar otomatis jalan saat PC nyala.
+                    </div>
+                </li>
+            </ol>
+        </div>
+      </Section>
+
+      {/* BAB 6: API SPECIFICATION */}
+      <Section title="6. Spesifikasi API">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+                <h4 className="font-bold text-white flex items-center gap-2 mb-4">
+                    <Network size={18} className="text-blue-400" /> Manajemen Konten
+                </h4>
+                <ul className="space-y-3 text-sm font-mono text-slate-300">
+                    <li className="flex items-center justify-between border-b border-slate-800 pb-2">
+                        <span className="text-green-400">POST /api/content</span>
+                        <span className="text-slate-500 text-xs">Upload konten baru</span>
+                    </li>
+                    <li className="flex items-center justify-between border-b border-slate-800 pb-2">
+                        <span className="text-blue-400">GET /api/content?signage_id=3</span>
+                        <span className="text-slate-500 text-xs">Ambil konten spesifik</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+                 <h4 className="font-bold text-white flex items-center gap-2 mb-4">
+                    <Package size={18} className="text-purple-400" /> Native Client Code
+                </h4>
+                <p className="text-xs text-slate-400 mb-2">Contoh logika Player (Node.js) jika tidak menggunakan browser:</p>
+                <pre className="bg-slate-950 p-2 rounded text-[10px] text-slate-300 font-mono overflow-hidden">
+{`const axios = require('axios');
+async function fetchContent() {
+  // 1. Ambil Data
+  const res = await axios.get('/api/content?id=SIG-01');
+  
+  // 2. Simpan Cache (Offline Support)
+  fs.writeFileSync('cache.json', JSON.stringify(res.data));
+  
+  // 3. Tampilkan
+  render(res.data);
+}`}
+                </pre>
+            </div>
+        </div>
       </Section>
 
     </div>

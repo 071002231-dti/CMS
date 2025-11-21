@@ -8,7 +8,8 @@ import {
   Settings, 
   FileText,
   Menu,
-  X
+  X,
+  BookOpen
 } from 'lucide-react';
 
 // Pages
@@ -53,10 +54,16 @@ const AdminLayout = ({ children }: { children?: React.ReactNode }) => {
         md:relative md:translate-x-0
       `}>
         <div className="p-6 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <Monitor className="text-white" size={18} />
-            </div>
+          <div className="flex items-center gap-3">
+            <img 
+              src="./logo.png"
+              onError={(e) => {
+                // Fallback to remote URL if local logo.png is not found
+                e.currentTarget.src = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Logo_UII_%28Universitas_Islam_Indonesia%29.png/180px-Logo_UII_%28Universitas_Islam_Indonesia%29.png";
+              }}
+              alt="UII Logo" 
+              className="w-8 h-auto" 
+            />
             <h1 className="text-xl font-bold text-white tracking-tight">FTI CMS</h1>
           </div>
           <button onClick={() => setIsMobileMenuOpen(false)} className="md:hidden text-slate-400">
@@ -72,7 +79,7 @@ const AdminLayout = ({ children }: { children?: React.ReactNode }) => {
           <SidebarItem to="/schedule" icon={CalendarDays} label="Scheduling" active={location.pathname === '/schedule'} />
           
           <div className="mt-8 mb-4 px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">System</div>
-          <SidebarItem to="/blueprint" icon={FileText} label="Blueprint & Architecture" active={location.pathname === '/blueprint'} />
+          <SidebarItem to="/blueprint" icon={BookOpen} label="Panduan & Dokumentasi" active={location.pathname === '/blueprint'} />
           <SidebarItem to="/settings" icon={Settings} label="Settings" active={location.pathname === '/settings'} />
         </nav>
 

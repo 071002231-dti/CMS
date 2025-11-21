@@ -126,19 +126,23 @@ const PlayerClient = () => {
       >
 
           {/* --- HEADER OVERLAY (Clock & Logo) --- */}
-          <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-black/90 to-transparent z-20 flex items-start justify-between p-6">
-             <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-blue-600 rounded flex items-center justify-center font-bold text-white">FTI</div>
+          <div className="absolute top-0 left-0 w-full h-28 bg-gradient-to-b from-black/90 to-transparent z-20 flex items-start justify-between p-6">
+             <div className="flex items-center gap-4">
+                <img 
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Logo_UII_%28Universitas_Islam_Indonesia%29.png/180px-Logo_UII_%28Universitas_Islam_Indonesia%29.png" 
+                  alt="UII Logo" 
+                  className="w-14 h-auto drop-shadow-lg" 
+                />
                 <div>
-                    <h1 className="text-white font-bold text-lg leading-none">FAKULTAS TEKNOLOGI INDUSTRI</h1>
-                    <p className="text-slate-300 text-xs uppercase tracking-wider">Universitas Islam Indonesia</p>
+                    <h1 className="text-white font-bold text-lg leading-none tracking-tight">FAKULTAS<br/>TEKNOLOGI INDUSTRI</h1>
+                    <p className="text-slate-300 text-[10px] uppercase tracking-wider mt-1">Universitas Islam Indonesia</p>
                 </div>
              </div>
              <div className="text-right">
-                 <div className="text-3xl font-bold text-white tabular-nums leading-none">
+                 <div className="text-3xl font-bold text-white tabular-nums leading-none drop-shadow-md">
                     {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                  </div>
-                 <div className="text-slate-300 text-xs uppercase font-medium">
+                 <div className="text-slate-300 text-xs uppercase font-medium drop-shadow-md">
                     {currentTime.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'short' })}
                  </div>
              </div>
@@ -147,7 +151,7 @@ const PlayerClient = () => {
           {/* --- EXIT BUTTON (Hidden by default) --- */}
           <button 
                 onClick={() => navigate('/')}
-                className={`absolute top-24 right-6 z-50 p-2 bg-black/50 backdrop-blur rounded-full text-white hover:bg-red-600 transition-all duration-300 ${showControls ? 'opacity-100' : 'opacity-0'}`}
+                className={`absolute top-28 right-6 z-50 p-2 bg-black/50 backdrop-blur rounded-full text-white hover:bg-red-600 transition-all duration-300 ${showControls ? 'opacity-100' : 'opacity-0'}`}
                 title="Exit Kiosk Mode"
           >
                 <X size={20} />
