@@ -159,7 +159,7 @@ const DashboardHome = () => {
               <AlertTriangle className="text-yellow-500 shrink-0" size={20} />
               <div>
                 <p className="text-sm font-medium text-slate-200">Maintenance Required</p>
-                <p className="text-xs text-slate-400 mt-1">FTI-SIGNAGE-05 has been offline for 2 hours. Check Wi-Fi connectivity.</p>
+                <p className="text-xs text-slate-400 mt-1">FTI-LANTAI-03 has been offline for 2 hours. Check Wi-Fi connectivity.</p>
               </div>
             </div>
           </div>

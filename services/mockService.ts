@@ -2,6 +2,7 @@ import { SignageUnit, SignageStatus, MediaContent, ContentType, Playlist, Schedu
 
 // --- Mock Database ---
 
+// Daftar lokasi spesifik sesuai permintaan user
 const LOCATION_NAMES = [
   "Lobi Barat",
   "Lobi Timur",
@@ -12,16 +13,30 @@ const LOCATION_NAMES = [
   "Lab Selatan"
 ];
 
-const MOCK_SIGNAGES: SignageUnit[] = Array.from({ length: 7 }).map((_, i) => ({
-  id: `sig-${i + 1}`,
-  hostname: `FTI-SIGNAGE-0${i + 1}`,
-  mac_address: `00:1A:2B:3C:4D:0${i + 1}`,
-  location: LOCATION_NAMES[i],
-  resolution: '2160x3840',
-  status: i === 4 ? SignageStatus.OFFLINE : SignageStatus.ONLINE,
-  last_heartbeat: new Date().toISOString(),
-  current_playlist_id: 'pl-1'
-}));
+const MOCK_SIGNAGES: SignageUnit[] = Array.from({ length: 7 }).map((_, i) => {
+  const location = LOCATION_NAMES[i];
+  
+  // Generate Semantic Hostname based on Location
+  let hostnameSuffix = location.toUpperCase().replace(/\s+/g, '-');
+  
+  // Format khusus untuk Lantai (Lantai 1 -> LANTAI-01) agar rapi
+  if (location.includes('Lantai')) {
+    const parts = location.split(' ');
+    const floorNum = parts[1].padStart(2, '0');
+    hostnameSuffix = `LANTAI-${floorNum}`;
+  }
+
+  return {
+    id: `sig-${i + 1}`,
+    hostname: `FTI-${hostnameSuffix}`, // e.g., FTI-LOBI-BARAT, FTI-LANTAI-01
+    mac_address: `00:1A:2B:3C:4D:0${i + 1}`,
+    location: location,
+    resolution: '2160x3840',
+    status: i === 4 ? SignageStatus.OFFLINE : SignageStatus.ONLINE, // Lantai 3 offline simulation
+    last_heartbeat: new Date().toISOString(),
+    current_playlist_id: 'pl-1'
+  };
+});
 
 const MOCK_CONTENT: MediaContent[] = [
   {
@@ -86,12 +101,6 @@ const MOCK_SCHEDULES: ScheduleAssignment[] = [
 ];
 
 // --- API Service Simulation ---
-// Implements the requested endpoints:
-// GET /api/content?signage_id=...
-// POST /api/content
-// POST /api/assign
-// GET /api/signage/status
-// POST /api/auth/login
 
 export const ApiService = {
   // POST /api/auth/login
